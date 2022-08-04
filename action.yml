@@ -1,0 +1,26 @@
+name: 'Godot Info'
+description: 'Provides info regarding Godot exports. Intended to be used with firebelley/godot-export workflow'
+author: 'Pixelbyte Studios'
+runs: 
+  using: "node16"
+  main: dist/index.js
+branding:
+  # icon: 'something'
+  color: 'white'
+inputs:
+  #required
+  relative_project_path:
+    description: The path relative to the root of the git repository containing the "project.godot" file.
+    required: true
+  #optional
+outputs:
+  win_artifact:
+    description: The name of the Windows artifact + .zip
+  html5_artifact:
+    description: The name of the Html5 artifact + .zip
+  osx_artifact:
+    description: The name of the OSX artifact + .zip
+  linux_artifact:
+    description: The name of the Linux artifact + .zip
+  android_artifact:
+    description: The name of the Android artifact + .zip
