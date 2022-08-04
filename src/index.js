@@ -35,9 +35,9 @@ function parseINIString(data) {
     return value;
 }
 
-function hasExportPresets() {
+function hasExportPresets(relativeProjectPath) {
     try {
-        const projectPath = path.resolve(RELATIVE_PROJECT_PATH);
+        const projectPath = path.resolve(relativeProjectPath);
         return fs.statSync(path.join(projectPath, 'export_presets.cfg')).isFile();
     } catch (e) {
         return false;
@@ -58,7 +58,7 @@ function run() {
         core.setOutput("linux_artifact", "")
         core.setOutput("android_artifact", "")
 
-        if (!hasExportPresets()) {
+        if (!hasExportPresets(relProjectPath)) {
             core.setFailed('No export_presets.cfg found. You mus have at least one export defined via the Godot editor!');
         }
         else {
