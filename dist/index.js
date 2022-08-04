@@ -2073,10 +2073,10 @@ function run() {
     try {
         const relProjectPath = core.getInput('relative_project_path');
         const projectPath = path.resolve(relProjectPath);
-        console.log(`Absolute Project Path: ${projectPath}`)
+        // console.log(`Absolute Project Path: ${projectPath}`)
 
         //Setup our defaults - do we need to do this?
-        core.setOutput("require_wine", true)
+        core.setOutput("require_wine", false)
         // core.setOutput("win_artifact", "")
         // core.setOutput("html5_artifact", "")
         // core.setOutput("osx_artifact", "")
@@ -2084,7 +2084,7 @@ function run() {
         // core.setOutput("android_artifact", "")
 
         if (!hasExportPresets(relProjectPath)) {
-            core.setFailed('No export_presets.cfg found. You mus have at least one export defined via the Godot editor!');
+            core.setFailed(`No export_presets.cfg found in ${projectPath}. You must have at least one export defined via the Godot editor!`);
         }
         else {
             const exportFile = path.join(projectPath, 'export_presets.cfg');
