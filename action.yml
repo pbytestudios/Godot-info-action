@@ -2,7 +2,7 @@ name: 'Godot Info'
 description: 'Provides info regarding Godot exports. Intended to be used with firebelley/godot-export workflow'
 author: 'Pixelbyte Studios'
 runs: 
-  using: "node12"
+  using: "node16"
   main: dist/index.js
 branding:
   # icon: 'something'
