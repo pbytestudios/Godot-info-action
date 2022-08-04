@@ -1,9 +1,8 @@
 const core = require('@actions/core');
-const github = require('@actions/github');
 const fs = require('fs');
 const path = require('path');
 
-//Note: To build this file type from the command line:
+//Note: To build this file, type from the command line:
 //npm run build
 
 function parseINIString(data){
