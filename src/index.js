@@ -1,6 +1,7 @@
 const core = require('@actions/core');
 const fs = require('fs');
 const path = require('path');
+const sanitize = require('sanitize-filename');
 
 //Note: To build this file, type from the command line:
 //npm run build
@@ -59,6 +60,9 @@ function run() {
         else {
             const exportFile = path.join(projectPath, 'export_presets.cfg');
             var data = fs.readFileSync(exportFile, 'utf8');
+
+            var presets = ini.decode(data);
+
             var ini = parseINIString(data);
 
             //Get the valid sections only
