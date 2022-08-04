@@ -67,6 +67,7 @@ function run() {
             Object.keys(ini).forEach(section => {
                 if (!section.endsWith('.options')) {
                     var export_path = ini[section]['export_path'];
+                    console.log(`export: ${export_path}`)
                     if (!export_path || export_path.length == 0) {
                         var name = sanitize(ini[section]['name'].replace(/"/g, ''));
                         core.warning(`No path set for preset '${name}'/ Skipping!`);
