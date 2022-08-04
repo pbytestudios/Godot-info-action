@@ -64,7 +64,7 @@ function run() {
 
             //Get the valid sections only
             var valid_sections = []
-            keys(ini).forEach(section => {
+            Object.keys(ini).forEach(section => {
                 if (!section.endsWith('.options')) {
                     var export_path = ini[section]['export_path'];
                     if (!export_path || export_path.length == 0) {
