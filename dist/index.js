@@ -2077,11 +2077,6 @@ function run() {
 
         //Setup our defaults - do we need to do this?
         core.setOutput("require_wine", false)
-        core.setOutput("windows_artifact", "")
-        core.setOutput("html5_artifact", "")
-        core.setOutput("osx_artifact", "")
-        core.setOutput("linux_artifact", "")
-        core.setOutput("android_artifact", "")
 
         if (!hasFile(relProjectPath, 'export_presets.cfg')) {
             core.setFailed(`No export_presets.cfg found in ${projectPath}. You must have at least one export defined via the Godot editor!`);
