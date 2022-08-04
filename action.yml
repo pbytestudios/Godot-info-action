@@ -16,6 +16,8 @@ inputs:
 outputs:
   win_artifact:
     description: The name of the Windows artifact + .zip
+  require_wine:
+    description: True if there is a valid windows export, false otherwise
   html5_artifact:
     description: The name of the Html5 artifact + .zip
   osx_artifact:

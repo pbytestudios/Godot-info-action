@@ -47,16 +47,17 @@ function hasExportPresets(relativeProjectPath) {
 function run() {
     try {
         const relProjectPath = core.getInput('relative_project_path');
-        console.log(`Relative Path: ${relProjectPath}`)
+        // console.log(`Relative Path: ${relProjectPath}`)
         const projectPath = path.resolve(relProjectPath);
-        console.log(`Absolute Project Path: ${projectPath}`)
+        // console.log(`Absolute Project Path: ${projectPath}`)
 
         //Setup our defaults - do we need to do this?
-        core.setOutput("win_artifact", "")
-        core.setOutput("html5_artifact", "")
-        core.setOutput("osx_artifact", "")
-        core.setOutput("linux_artifact", "")
-        core.setOutput("android_artifact", "")
+        core.setOutput("require_wine", true)
+        // core.setOutput("win_artifact", "")
+        // core.setOutput("html5_artifact", "")
+        // core.setOutput("osx_artifact", "")
+        // core.setOutput("linux_artifact", "")
+        // core.setOutput("android_artifact", "")
 
         if (!hasExportPresets(relProjectPath)) {
             core.setFailed('No export_presets.cfg found. You mus have at least one export defined via the Godot editor!');
@@ -77,8 +78,10 @@ function run() {
                 var platform = ini[section]['platform'].replace(/"/g, '');
                 var archiveName = `${name}.zip`;
                 console.log(`Found ${name}.zip on platform '${platform}'`)
-                if (platform == "Windows Desktop")
+                if (platform == "Windows Desktop") {
                     core.setOutput("win_artifact", archiveName)
+                    core.setOutput("require_wine", true)
+                }
                 else if (platform == "HTML5")
                     core.setOutput("html5_artifact", archiveName)
                 else if (platform == "Mac OSX")
