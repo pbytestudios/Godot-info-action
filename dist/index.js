@@ -2077,7 +2077,7 @@ function run() {
 
         //Setup our defaults - do we need to do this?
         core.setOutput("require_wine", false)
-        // core.setOutput("win_artifact", "")
+        // core.setOutput("windows_artifact", "")
         // core.setOutput("html5_artifact", "")
         // core.setOutput("osx_artifact", "")
         // core.setOutput("linux_artifact", "")
@@ -2103,7 +2103,7 @@ function run() {
                 var archiveName = `${name}.zip`;
                 console.log(`Found ${name}.zip on platform '${platform}'`)
                 if (platform == "Windows Desktop") {
-                    core.setOutput("win_artifact", archiveName)
+                    core.setOutput("windows_artifact", archiveName)
                     core.setOutput("require_wine", true)
                 }
                 else if (platform == "HTML5")

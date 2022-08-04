@@ -14,7 +14,7 @@ inputs:
     required: true
   #optional
 outputs:
-  win_artifact:
+  windows_artifact:
     description: The name of the Windows artifact + .zip
   require_wine:
     description: True if there is a valid windows export, false otherwise
