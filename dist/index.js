@@ -2222,7 +2222,7 @@ function run() {
             var valid_sections = []
             Object.keys(ini).forEach(section => {
                 if (!section.endsWith('.options')) {
-                    var export_path = ini[section]['export_path'];
+                    var export_path = ini[section]['export_path'].replace(/"/g, '');
                     console.log(`export: ${export_path}`)
                     if (!export_path || export_path.length == 0) {
                         var name = sanitize(ini[section]['name'].replace(/"/g, ''));
