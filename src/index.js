@@ -60,9 +60,6 @@ function run() {
         else {
             const exportFile = path.join(projectPath, 'export_presets.cfg');
             var data = fs.readFileSync(exportFile, 'utf8');
-
-            var presets = ini.decode(data);
-
             var ini = parseINIString(data);
 
             //Get the valid sections only
