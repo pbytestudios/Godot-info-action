@@ -47,9 +47,8 @@ function hasExportPresets(relativeProjectPath) {
 function run() {
     try {
         const relProjectPath = core.getInput('relative_project_path');
-        console.log(`Relative Path: ${relProjectPath}`)
         const projectPath = path.resolve(relProjectPath);
-        // console.log(`Absolute Project Path: ${projectPath}`)
+        console.log(`Absolute Project Path: ${projectPath}`)
 
         //Setup our defaults - do we need to do this?
         core.setOutput("require_wine", true)
