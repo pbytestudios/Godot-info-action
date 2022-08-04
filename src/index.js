@@ -65,8 +65,16 @@ function run() {
             //Get the valid sections only
             var valid_sections = []
             Object.keys(ini).forEach(key => {
-                if (!key.endsWith('.options'))
-                    valid_sections.push(key);
+                var export_path = ini[key]['export_path'];
+
+                if (!key.endsWith('.options')) {
+                    if (!export_path) {
+                        var name = sanitize(ini[key]['name'].replace(/"/g, ''));
+                        core.warning(`No path set for preset '${name}'/ Skipping!`);
+                    }
+                    else
+                        valid_sections.push(key);
+                }
             });
             valid_sections.forEach(section => {
                 var name = sanitize(ini[section]['name'].replace(/"/g, ''));
