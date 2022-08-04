@@ -2093,7 +2093,7 @@ function run() {
                     valid_sections.push(key);
             });
             valid_sections.forEach(section => {
-                var name = ini[section]['name'].replace(/"/g, '');
+                var name = sanitize(ini[section]['name'].replace(/"/g, ''));
                 var platform = ini[section]['platform'].replace(/"/g, '');
                 var archiveName = `${name}.zip`;
                 console.log(`Found ${name}.zip on platform '${platform}'`)
