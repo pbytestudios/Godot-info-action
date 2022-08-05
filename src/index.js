@@ -4,6 +4,8 @@ const path = require('path');
 const sanitize = require('sanitize-filename');
 
 const ITCH_PRJ_FILE = "itch.txt";
+const GODOT_PRJ_FILE = "project.godot";
+const ITCH_PRJ_KEY = "itch_project"
 
 //Note: To build this file, type from the command line:
 //npm run build
@@ -23,9 +25,11 @@ function parseINIString(data) {
         } else if (regex.param.test(line)) {
             var match = line.match(regex.param);
             if (section) {
-                value[section][match[1]] = match[2];
+                //remove double quotes
+                value[section][match[1].replace(/"/g, '')] = match[2].replace(/"/g, '');
             } else {
-                value[match[1]] = match[2];
+                //remove double quotes
+                value[match[1]] = match[2].replace(/"/g, '');
             }
         } else if (regex.section.test(line)) {
             var match = line.match(regex.section);
@@ -68,10 +72,10 @@ function run() {
             var valid_sections = []
             Object.keys(ini).forEach(section => {
                 if (!section.endsWith('.options')) {
-                    var export_path = ini[section]['export_path'].replace(/"/g, '');
+                    var export_path = ini[section]['export_path'];
                     // console.log(`export: ${export_path}`)
                     if (!export_path || export_path.length == 0) {
-                        var name = sanitize(ini[section]['name'].replace(/"/g, ''));
+                        var name = sanitize(ini[section]['name']);
                         core.warning(`No path set for preset '${name}'/ Skipping!`);
                     }
                     else
@@ -79,8 +83,8 @@ function run() {
                 }
             });
             valid_sections.forEach(section => {
-                var name = sanitize(ini[section]['name'].replace(/"/g, ''));
-                var platform = ini[section]['platform'].replace(/"/g, '');
+                var name = sanitize(ini[section]['name']);
+                var platform = ini[section]['platform'];
                 var archiveName = `${name}.zip`;
                 console.log(`Found ${name}.zip on platform '${platform}'`)
                 if (platform == "Windows Desktop") {
@@ -98,13 +102,17 @@ function run() {
             });
         }
 
-        if (!hasFile(relProjectPath, ITCH_PRJ_FILE)){
-            core.warning(`Unable to find file '${ITCH_PRJ_FILE}' in the Godot project dir '${relProjectPath}'.\nAdd this with the itch project name to allow upload to itch.io.`)
+        //Now look for the itch_project setting in the godot project file
+        const godotFile = path.join(projectPath, GODOT_PRJ_FILE);
+        var data = fs.readFileSync(godotFile, 'utf8');
+        var ini = parseINIString(data);
+
+        if(ini['global'] == null || !ini['global'][ITCH_PRJ_KEY] || ini['global'][ITCH_PRJ_KEY].length == 0){
+            core.warning(`Unable to find '${ITCH_PRJ_KEY}' in '${GODOT_PRJ_FILE}'. Set '${ITCH_PRJ_KEY}'= the itch.io project name to export to.`);
+
         }
         else{
-            const filename = path.join(projectPath, ITCH_PRJ_FILE);
-            var data = fs.readFileSync(filename, 'utf8');
-            var itch_project = data.match(/\s*([^\s]+)/)[1];
+            var itch_project = ini['global'][ITCH_PRJ_KEY];
             core.setOutput("itch_project", itch_project);
             console.log(`Itch project found: ${itch_project}`);
         }
