@@ -2262,7 +2262,7 @@ function run() {
             var data = fs.readFileSync(filename, 'utf8');
             var itch_project = data.match(/\s*([^\s]+)/)[1];
             core.setOutput("itch_project", itch_project);
-            core.log(`Itch project found: ${itch_project}`);
+            console.log(`Itch project found: ${itch_project}`);
         }
     }
     catch (error) {
