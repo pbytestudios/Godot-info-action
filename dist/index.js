@@ -2159,6 +2159,8 @@ const fs = __webpack_require__(747);
 const path = __webpack_require__(622);
 const sanitize = __webpack_require__(976);
 
+const ITCH_PRJ_FILE = "itch.txt";
+
 //Note: To build this file, type from the command line:
 //npm run build
 
@@ -2250,6 +2252,17 @@ function run() {
                 else if (platform == "Android")
                     core.setOutput("android_artifact", archiveName)
             });
+        }
+
+        if (!hasFile(relProjectPath, ITCH_PRJ_FILE)){
+            core.warning(`Unable to find file '${ITCH_PRJ_FILE}' in the Godot project dir '${projectPath}'.\nAdd this with the itch project namr to allow upload to itch.io.`)
+        }
+        else{
+            const filename = path.join(projectPath, ITCH_PRJ_FILE);
+            var data = fs.readFileSync(filename, 'utf8');
+            var itch_project = data.match(/\s*([^\s]+)/)[1];
+            core.setOutput("itch_project", itch_project);
+            core.log(`Itch project found: ${itch_project}`);
         }
     }
     catch (error) {
