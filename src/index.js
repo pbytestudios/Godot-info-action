@@ -57,7 +57,7 @@ function run() {
         core.setOutput("require_wine", false)
 
         if (!hasFile(relProjectPath, 'export_presets.cfg')) {
-            core.setFailed(`No export_presets.cfg found in ${projectPath}. You must have at least one export defined via the Godot editor!`);
+            core.setFailed(`No export_presets.cfg found in ${relProjectPath}. You must have at least one export defined via the Godot editor!`);
         }
         else {
             const exportFile = path.join(projectPath, 'export_presets.cfg');
@@ -99,7 +99,7 @@ function run() {
         }
 
         if (!hasFile(relProjectPath, ITCH_PRJ_FILE)){
-            core.warning(`Unable to find file '${ITCH_PRJ_FILE}' in the Godot project dir '${projectPath}'.\nAdd this with the itch project namr to allow upload to itch.io.`)
+            core.warning(`Unable to find file '${ITCH_PRJ_FILE}' in the Godot project dir '${relProjectPath}'.\nAdd this with the itch project name to allow upload to itch.io.`)
         }
         else{
             const filename = path.join(projectPath, ITCH_PRJ_FILE);
