@@ -83,7 +83,7 @@ function run(): void {
             //Get the valid sections only
             var valid_sections:Array<string> = [];
             Object.keys(ini).forEach(section => {
-                if (!section.endsWith('.options')) {
+                if (!section.endsWith('.options') || section.length == 0) {
                     var export_path = ini[section]['export_path'];
                     // console.log(`export: ${export_path}`)
                     if (!export_path || export_path.length == 0) {
@@ -121,7 +121,6 @@ function run(): void {
 
         if(ini['global'] == null || !ini['global'][ITCH_PRJ_KEY] || ini['global'][ITCH_PRJ_KEY].length == 0){
             core.warning(`Unable to find '${ITCH_PRJ_KEY}' in '${GODOT_PRJ_FILE}'. Set '${ITCH_PRJ_KEY}'= the itch.io project name to export to.`);
-
         }
         else{
             var itch_project = ini['global'][ITCH_PRJ_KEY];
