@@ -1,48 +1,60 @@
-const core = require('@actions/core');
-const fs = require('fs');
-const path = require('path');
-const sanitize = require('sanitize-filename');
+import * as core from '@actions/core';
+import * as fs from 'fs';
+import path from 'path';
+import sanitize from 'sanitize-filename';
 
-const ITCH_PRJ_FILE = "itch.txt";
 const GODOT_PRJ_FILE = "project.godot";
 const ITCH_PRJ_KEY = "itch_project"
+
+type IniType = { [id: string]: MapType}
+type MapType = {[id: string] : string};
 
 //Note: To build this file, type from the command line:
 //npm run build
 
-function parseINIString(data) {
+function parseINIString(data:string): IniType {
     var regex = {
         section: /^\s*\[\s*([^\]]*)\s*\]\s*$/,
         param: /^\s*([^=]+?)\s*=\s*(.*?)\s*$/,
         comment: /^\s*;.*$/
     };
-    var value = {};
-    var lines = data.split(/[\r\n]+/);
-    var section = null;
+    
+    var ini:IniType = {};
+    var lines:string[] = data.split(/[\r\n]+/);
+    var section:string = '';
     lines.forEach(function (line) {
+        //Skip comments
         if (regex.comment.test(line)) {
             return;
+        //Do we have a parameter?
         } else if (regex.param.test(line)) {
             var match = line.match(regex.param);
+            if(match == null || match.length == 0)
+                return;
+            var parameter:string = match[1].replace(/"/g,'');
+            var val:string =  match[2].replace(/"/g,'')
             if (section) {
-                //remove double quotes
-                value[section][match[1].replace(/"/g, '')] = match[2].replace(/"/g, '');
+                
+                ini[section][parameter] = val;
             } else {
                 //remove double quotes
-                value[match[1]] = match[2].replace(/"/g, '');
+                ini[''][parameter] = val;
             }
+        //Check to see if we have a new section...
         } else if (regex.section.test(line)) {
             var match = line.match(regex.section);
-            value[match[1]] = {};
+            if(match == null || match.length == 0)
+                return;
+            ini[match[1]] = {};
             section = match[1];
         } else if (line.length == 0 && section) {
-            section = null;
+            section = '';
         };
     });
-    return value;
+    return ini;
 }
 
-function hasFile(relativePath, filename) {
+function hasFile(relativePath:string, filename:string): boolean {
     try {
         const projectPath = path.resolve(relativePath);
         return fs.statSync(path.join(projectPath, filename)).isFile();
@@ -51,14 +63,14 @@ function hasFile(relativePath, filename) {
     }
 }
 
-function run() {
+function run(): void {
     try {
         const relProjectPath = core.getInput('relative_project_path');
         const projectPath = path.resolve(relProjectPath);
         // console.log(`Absolute Project Path: ${projectPath}`)
 
         //Setup our defaults - do we need to do this?
-        core.setOutput("require_wine", false)
+        core.setOutput("require_wine", false);
 
         if (!hasFile(relProjectPath, 'export_presets.cfg')) {
             core.setFailed(`No export_presets.cfg found in ${relProjectPath}. You must have at least one export defined via the Godot editor!`);
@@ -69,7 +81,7 @@ function run() {
             var ini = parseINIString(data);
 
             //Get the valid sections only
-            var valid_sections = []
+            var valid_sections:Array<string> = [];
             Object.keys(ini).forEach(section => {
                 if (!section.endsWith('.options')) {
                     var export_path = ini[section]['export_path'];
@@ -86,19 +98,19 @@ function run() {
                 var name = sanitize(ini[section]['name']);
                 var platform = ini[section]['platform'];
                 var archiveName = `${name}.zip`;
-                console.log(`Found ${name}.zip on platform '${platform}'`)
+                console.log(`Found ${name}.zip on platform '${platform}'`);
                 if (platform == "Windows Desktop") {
-                    core.setOutput("windows_artifact", archiveName)
-                    core.setOutput("require_wine", true)
+                    core.setOutput("windows_artifact", archiveName);
+                    core.setOutput("require_wine", true);
                 }
                 else if (platform == "HTML5")
-                    core.setOutput("html5_artifact", archiveName)
+                    core.setOutput("html5_artifact", archiveName);
                 else if (platform == "Mac OSX")
-                    core.setOutput("osx_artifact", archiveName)
+                    core.setOutput("osx_artifact", archiveName);
                 else if (platform == "Linux/X11")
-                    core.setOutput("linux_artifact", archiveName)
+                    core.setOutput("linux_artifact", archiveName);
                 else if (platform == "Android")
-                    core.setOutput("android_artifact", archiveName)
+                    core.setOutput("android_artifact", archiveName);
             });
         }
 
@@ -118,7 +130,11 @@ function run() {
         }
     }
     catch (error) {
-        core.setFailed(error.message);
+        if (typeof error === "string") {
+            core.setFailed(error);
+        } else if (error instanceof Error) {
+            core.setFailed(error.message);
+        }
         process.exit(1);
     }
 }
