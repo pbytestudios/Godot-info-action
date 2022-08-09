@@ -3077,7 +3077,7 @@ function run() {
             valid_sections.forEach(section => {
                 var sanitizedName = sanitize_filename__WEBPACK_IMPORTED_MODULE_3___default()(ini[section]['name']);
                 //Apparently, when creating releases on Github, spaces are replaces by '.' so:
-                sanitizedName = sanitizedName.replace(/\./g, '');
+                sanitizedName = sanitizedName.replace(' ', '.');
                 var platform = ini[section]['platform'];
                 var archiveName = `${sanitizedName}.zip`;
                 console.log(`Found ${archiveName} on platform '${platform}'`);
