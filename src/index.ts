@@ -6,20 +6,20 @@ import sanitize from 'sanitize-filename';
 const GODOT_PRJ_FILE = "project.godot";
 const ITCH_PRJ_KEY = "itch_project"
 
-type IniType = { [id: string]: MapType | MapType} 
-type MapType = {[id: string] : string};
+// type IniType = { [id: string]: MapType | string}
+// type MapType = { [key: string] : string };
 
 //Note: To build this file, type from the command line:
 //npm run build
 
-function parseINIString(data:string): IniType {
+function parseINIString(data:string): any {
     var regex = {
         section: /^\s*\[\s*([^\]]*)\s*\]\s*$/,
         param: /^\s*([^=]+?)\s*=\s*(.*?)\s*$/,
         comment: /^\s*;.*$/
     };
     
-    var ini:IniType = {};
+    var ini:any = {};
     var lines:string[] = data.split(/[\r\n]+/);
     var section:string|null = null;
     lines.forEach(function (line) {
@@ -37,7 +37,7 @@ function parseINIString(data:string): IniType {
                 ini[section][parameter] = val;
             } else {
                 //remove double quotes
-                ini[''][parameter] = val;
+                ini[parameter] = val;
             }
         //Check to see if we have a new section...
         } else if (regex.section.test(line)) {
@@ -122,7 +122,7 @@ function run(): void {
             core.warning(`Unable to find '${ITCH_PRJ_KEY}' in '${GODOT_PRJ_FILE}'. Set '${ITCH_PRJ_KEY}'= the itch.io project name to export to.`);
         }
         else{
-            var itch_project = ini['global'][ITCH_PRJ_KEY];
+            var itch_project:string = ini['global'][ITCH_PRJ_KEY];
             core.setOutput("itch_project", itch_project);
             console.log(`Itch project found: ${itch_project}`);
         }

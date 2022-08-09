@@ -2989,6 +2989,8 @@ __nccwpck_require__.r(__webpack_exports__);
 
 const GODOT_PRJ_FILE = "project.godot";
 const ITCH_PRJ_KEY = "itch_project";
+// type IniType = { [id: string]: MapType | string}
+// type MapType = { [key: string] : string };
 //Note: To build this file, type from the command line:
 //npm run build
 function parseINIString(data) {
@@ -3017,7 +3019,7 @@ function parseINIString(data) {
             }
             else {
                 //remove double quotes
-                ini[''][parameter] = val;
+                ini[parameter] = val;
             }
             //Check to see if we have a new section...
         }
