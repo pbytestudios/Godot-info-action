@@ -83,21 +83,24 @@ function run(): void {
             var valid_sections:Array<string> = [];
             Object.keys(ini).forEach(section => {
                 if (!section.endsWith('.options') || section.length == 0) {
-                    var export_path = ini[section]['export_path'];
+                    var export_path:string = ini[section]['export_path'];
                     // console.log(`export: ${export_path}`)
                     if (!export_path || export_path.length == 0) {
-                        var name = sanitize(ini[section]['name']);
+                        var name:string = ini[section]['name'];
                         core.warning(`No path set for preset '${name}'/ Skipping!`);
                     }
                     else
                         valid_sections.push(section);
                 }
             });
+
             valid_sections.forEach(section => {
-                var name = sanitize(ini[section]['name']);
+                var sanitizedName = sanitize(ini[section]['name']);
+                //Apparently, when creating releases on Github, spaces are replaces by '.' so:
+                sanitizedName = sanitizedName.replace(/\./g, '');
                 var platform = ini[section]['platform'];
-                var archiveName = `${name}.zip`;
-                console.log(`Found ${name}.zip on platform '${platform}'`);
+                var archiveName = `${sanitizedName}.zip`;
+                console.log(`Found ${archiveName} on platform '${platform}'`);
                 if (platform == "Windows Desktop") {
                     core.setOutput("windows_artifact", archiveName);
                     core.setOutput("require_wine", true);

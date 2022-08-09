@@ -3067,7 +3067,7 @@ function run() {
                     var export_path = ini[section]['export_path'];
                     // console.log(`export: ${export_path}`)
                     if (!export_path || export_path.length == 0) {
-                        var name = sanitize_filename__WEBPACK_IMPORTED_MODULE_3___default()(ini[section]['name']);
+                        var name = ini[section]['name'];
                         _actions_core__WEBPACK_IMPORTED_MODULE_0__.warning(`No path set for preset '${name}'/ Skipping!`);
                     }
                     else
@@ -3075,10 +3075,12 @@ function run() {
                 }
             });
             valid_sections.forEach(section => {
-                var name = sanitize_filename__WEBPACK_IMPORTED_MODULE_3___default()(ini[section]['name']);
+                var sanitizedName = sanitize_filename__WEBPACK_IMPORTED_MODULE_3___default()(ini[section]['name']);
+                //Apparently, when creating releases on Github, spaces are replaces by '.' so:
+                sanitizedName = sanitizedName.replace(/\./g, '');
                 var platform = ini[section]['platform'];
-                var archiveName = `${name}.zip`;
-                console.log(`Found ${name}.zip on platform '${platform}'`);
+                var archiveName = `${sanitizedName}.zip`;
+                console.log(`Found ${archiveName} on platform '${platform}'`);
                 if (platform == "Windows Desktop") {
                     _actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput("windows_artifact", archiveName);
                     _actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput("require_wine", true);
