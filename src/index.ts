@@ -6,7 +6,7 @@ import sanitize from 'sanitize-filename';
 const GODOT_PRJ_FILE = "project.godot";
 const ITCH_PRJ_KEY = "itch_project"
 
-type IniType = { [id: string]: MapType}
+type IniType = { [id: string]: MapType | MapType} 
 type MapType = {[id: string] : string};
 
 //Note: To build this file, type from the command line:
@@ -21,7 +21,7 @@ function parseINIString(data:string): IniType {
     
     var ini:IniType = {};
     var lines:string[] = data.split(/[\r\n]+/);
-    var section:string = '';
+    var section:string|null = null;
     lines.forEach(function (line) {
         //Skip comments
         if (regex.comment.test(line)) {
@@ -34,7 +34,6 @@ function parseINIString(data:string): IniType {
             var parameter:string = match[1].replace(/"/g,'');
             var val:string =  match[2].replace(/"/g,'')
             if (section) {
-                
                 ini[section][parameter] = val;
             } else {
                 //remove double quotes
@@ -45,10 +44,10 @@ function parseINIString(data:string): IniType {
             var match = line.match(regex.section);
             if(match == null || match.length == 0)
                 return;
-            ini[match[1]] = {};
             section = match[1];
+            ini[section] = {};
         } else if (line.length == 0 && section) {
-            section = '';
+            section = null
         };
     });
     return ini;

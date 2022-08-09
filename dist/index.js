@@ -2999,7 +2999,7 @@ function parseINIString(data) {
     };
     var ini = {};
     var lines = data.split(/[\r\n]+/);
-    var section = '';
+    var section = null;
     lines.forEach(function (line) {
         //Skip comments
         if (regex.comment.test(line)) {
@@ -3025,11 +3025,11 @@ function parseINIString(data) {
             var match = line.match(regex.section);
             if (match == null || match.length == 0)
                 return;
-            ini[match[1]] = {};
             section = match[1];
+            ini[section] = {};
         }
         else if (line.length == 0 && section) {
-            section = '';
+            section = null;
         }
         ;
     });
@@ -3061,7 +3061,7 @@ function run() {
             //Get the valid sections only
             var valid_sections = [];
             Object.keys(ini).forEach(section => {
-                if (!section.endsWith('.options')) {
+                if (!section.endsWith('.options') || section.length == 0) {
                     var export_path = ini[section]['export_path'];
                     // console.log(`export: ${export_path}`)
                     if (!export_path || export_path.length == 0) {
