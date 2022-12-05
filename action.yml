@@ -1,5 +1,5 @@
 name: 'Godot Info'
-description: 'Provides info regarding Godot exports. Intended to be used with firebelley/godot-export workflow'
+description: 'Provides info regarding Godot exports.'
 author: 'Pixelbyte Studios'
 runs: 
   using: "node16"
