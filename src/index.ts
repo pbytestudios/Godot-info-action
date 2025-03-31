@@ -105,7 +105,7 @@ function run(): void {
                     core.setOutput("windows_artifact", archiveName);
                     core.setOutput("require_wine", true);
                 }
-                else if (platform == "HTML5")
+                else if (platform == "Web")
                     core.setOutput("html5_artifact", archiveName);
                 else if (platform == "Mac OSX")
                     core.setOutput("osx_artifact", archiveName);

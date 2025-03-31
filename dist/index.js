@@ -3830,7 +3830,7 @@ function run() {
                     _actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput("windows_artifact", archiveName);
                     _actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput("require_wine", true);
                 }
-                else if (platform == "HTML5")
+                else if (platform == "Web")
                     _actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput("html5_artifact", archiveName);
                 else if (platform == "Mac OSX")
                     _actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput("osx_artifact", archiveName);
